@@ -22,7 +22,7 @@ const FAQPage = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [expandedItems, setExpandedItems] = useState(new Set());
 
-  const categories = [
+  const initialCategories = [
     { id: 'all', label: 'All Questions', icon: Users, count: 0 },
     { id: 'booking', label: 'Booking & Payment', icon: Calendar, count: 0 },
     { id: 'experiences', label: 'Farm Experiences', icon: MapPin, count: 0 },
@@ -130,7 +130,7 @@ const FAQPage = () => {
     })));
   }, []);
 
-  const [categories, setCategories] = useState(categories);
+  const [categories, setCategories] = useState(initialCategories);
 
   const toggleItem = (id) => {
     const newExpanded = new Set(expandedItems);
