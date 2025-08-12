@@ -20,11 +20,17 @@ import TermsPage from './pages/public/TermsPage.jsx';
 import PrivacyPage from './pages/public/PrivacyPage.jsx';
 import BecomeHostPage from './pages/public/BecomeHostPage.jsx';
 
-// Protected Pages
+// Protected User Pages
 import BookingPage from './pages/user/BookingPage.jsx';
+import ProfilePage from './pages/user/ProfilePage.jsx';
+import MyBookingsPage from './pages/user/MyBookingsPage.jsx';
+import WishlistPage from './pages/user/WishlistPage.jsx';
+import PaymentsPage from './pages/user/PaymentsPage.jsx';
+import NotificationsPage from './pages/user/NotificationsPage.jsx';
 
 // Host Pages
 import HostDashboardPage from './pages/host/HostDashboardPage.jsx';
+import CreateExperiencePage from './pages/host/CreateExperiencePage.jsx';
 
 // System Pages
 import NotFoundPage from './pages/system/NotFoundPage.jsx';
@@ -110,7 +116,7 @@ const App = () => {
         </PublicLayout>
       } />
 
-      {/* Protected Routes with AppLayout */}
+      {/* Protected User Routes with AppLayout */}
       {isAuthenticated && (
         <>
           <Route path={PROTECTED_ROUTES.BOOKING} element={
@@ -119,18 +125,35 @@ const App = () => {
             </AppLayout>
           } />
           
-          {/* Add more protected routes here as needed */}
-          {/* <Route path={PROTECTED_ROUTES.PROFILE} element={
+          <Route path={PROTECTED_ROUTES.PROFILE} element={
             <AppLayout>
               <ProfilePage />
             </AppLayout>
-          } /> */}
+          } />
           
-          {/* <Route path={PROTECTED_ROUTES.MY_BOOKINGS} element={
+          <Route path={PROTECTED_ROUTES.MY_BOOKINGS} element={
             <AppLayout>
               <MyBookingsPage />
             </AppLayout>
-          } /> */}
+          } />
+
+          <Route path={PROTECTED_ROUTES.WISHLIST} element={
+            <AppLayout>
+              <WishlistPage />
+            </AppLayout>
+          } />
+
+          <Route path={PROTECTED_ROUTES.PAYMENTS} element={
+            <AppLayout>
+              <PaymentsPage />
+            </AppLayout>
+          } />
+
+          <Route path={PROTECTED_ROUTES.NOTIFICATIONS} element={
+            <AppLayout>
+              <NotificationsPage />
+            </AppLayout>
+          } />
         </>
       )}
 
@@ -143,6 +166,12 @@ const App = () => {
             </AppLayout>
           } />
           
+          <Route path={HOST_ROUTES.CREATE_EXPERIENCE} element={
+            <AppLayout>
+              <CreateExperiencePage />
+            </AppLayout>
+          } />
+          
           {/* Add more host routes here as needed */}
           {/* <Route path={HOST_ROUTES.EXPERIENCES} element={
             <AppLayout>
@@ -150,9 +179,33 @@ const App = () => {
             </AppLayout>
           } /> */}
           
-          {/* <Route path={HOST_ROUTES.CREATE_EXPERIENCE} element={
+          {/* <Route path={HOST_ROUTES.EDIT_EXPERIENCE} element={
             <AppLayout>
-              <CreateExperiencePage />
+              <EditExperiencePage />
+            </AppLayout>
+          } /> */}
+          
+          {/* <Route path={HOST_ROUTES.BOOKINGS} element={
+            <AppLayout>
+              <HostBookingsPage />
+            </AppLayout>
+          } /> */}
+          
+          {/* <Route path={HOST_ROUTES.EARNINGS} element={
+            <AppLayout>
+              <HostEarningsPage />
+            </AppLayout>
+          } /> */}
+          
+          {/* <Route path={HOST_ROUTES.ANALYTICS} element={
+            <AppLayout>
+              <HostAnalyticsPage />
+            </AppLayout>
+          } /> */}
+          
+          {/* <Route path={HOST_ROUTES.SETTINGS} element={
+            <AppLayout>
+              <HostSettingsPage />
             </AppLayout>
           } /> */}
         </>
