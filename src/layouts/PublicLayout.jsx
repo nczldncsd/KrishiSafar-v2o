@@ -15,7 +15,9 @@ import {
   BarChart3,
   Calendar,
   Heart,
-  Plus
+  Plus,
+  DollarSign,
+  Users
 } from 'lucide-react';
 import AnimatedButton from '../components/shared/AnimatedButton';
 import { motion } from 'framer-motion';
@@ -55,21 +57,21 @@ const PublicLayout = ({ children }) => {
 
   const navigationItems = getNavigationItems();
 
-  const getIconForRoute = (label) => {
+  const getIconForRoute = (iconName) => {
     const iconMap = {
-      'Home': Home,
-      'Explore Farms': Map,
-      'About': Info,
-      'Contact': Mail,
-      'Dashboard': BarChart3,
-      'My Experiences': Map,
-      'Bookings': Calendar,
-      'My Bookings': Calendar,
-      'Wishlist': Heart,
-      'Profile': User,
-      'Create Experience': Plus
+      'home': Home,
+      'map': Map,
+      'info': Info,
+      'mail': Mail,
+      'user': User,
+      'dashboard': BarChart3,
+      'calendar': Calendar,
+      'heart': Heart,
+      'dollar-sign': DollarSign,
+      'bar-chart': BarChart3,
+      'users': Users
     };
-    return iconMap[label] || Home;
+    return iconMap[iconName] || Home;
   };
 
   return (
@@ -91,7 +93,7 @@ const PublicLayout = ({ children }) => {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex space-x-1">
               {navigationItems.map((item) => {
-                const Icon = getIconForRoute(item.label);
+                const Icon = getIconForRoute(item.icon);
                 return (
                   <Link
                     key={item.path}
@@ -158,7 +160,7 @@ const PublicLayout = ({ children }) => {
                           {/* Navigation Links */}
                           <div className="space-y-1">
                             {navigationItems.map((item) => {
-                              const Icon = getIconForRoute(item.label);
+                              const Icon = getIconForRoute(item.icon);
                               return (
                                 <Link
                                   key={item.path}
@@ -231,7 +233,7 @@ const PublicLayout = ({ children }) => {
             >
               <nav className="space-y-2">
                 {navigationItems.map((item) => {
-                  const Icon = getIconForRoute(item.label);
+                  const Icon = getIconForRoute(item.icon);
                   return (
                     <Link
                       key={item.path}
