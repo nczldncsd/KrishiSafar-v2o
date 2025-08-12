@@ -11,7 +11,7 @@ const BookButton = ({ experienceId, className = '' }) => {
     return (
       <button
         disabled
-        className={`w-full bg-gray-300 text-gray-500 cursor-not-allowed py-3 px-6 rounded-lg font-medium ${className}`}
+        className={`w-full bg-slate-300 text-slate-500 cursor-not-allowed py-3 px-6 rounded-xl font-medium ${className}`}
         title="Hosts cannot book experiences"
       >
         Host Account
@@ -24,7 +24,7 @@ const BookButton = ({ experienceId, className = '' }) => {
     return (
       <Link
         to={`/booking/${experienceId}`}
-        className={`w-full btn-primary text-center py-3 px-6 rounded-lg font-medium hover:bg-primary-700 transition-colors ${className}`}
+        className={`w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white text-center py-3 px-6 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-200 ${className}`}
       >
         Book Now
       </Link>
@@ -35,7 +35,7 @@ const BookButton = ({ experienceId, className = '' }) => {
   return (
     <Link
       to={PUBLIC_ROUTES.LOGIN}
-      className={`w-full btn-outline text-center py-3 px-6 rounded-lg font-medium hover:bg-primary-50 transition-colors ${className}`}
+      className={`w-full border-2 border-blue-500 text-blue-600 hover:bg-blue-50 text-center py-3 px-6 rounded-xl font-medium transition-all duration-200 ${className}`}
     >
       Login to Book
     </Link>

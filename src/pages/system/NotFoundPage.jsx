@@ -24,14 +24,14 @@ const NotFoundPage = () => {
         <div className="space-y-4">
           <Link
             to={PUBLIC_ROUTES.HOME}
-            className="w-full btn-primary py-3 px-6 text-base font-medium hover:bg-primary-700 transition-colors"
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 px-6 text-base font-medium shadow-lg hover:shadow-xl transition-all duration-200 rounded-xl"
           >
             Go to Homepage
           </Link>
           
           <Link
             to={PUBLIC_ROUTES.EXPERIENCES}
-            className="w-full btn-outline py-3 px-6 text-base font-medium hover:bg-primary-50 transition-colors"
+            className="w-full border-2 border-blue-500 text-blue-600 hover:bg-blue-50 py-3 px-6 text-base font-medium transition-all duration-200 rounded-xl"
           >
             Browse Experiences
           </Link>

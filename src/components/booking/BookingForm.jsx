@@ -196,10 +196,8 @@ const BookingForm = () => {
       <button
         type="submit"
         disabled={isSubmitting}
-        className={`w-full btn-primary py-3 px-6 rounded-lg font-medium transition-colors ${
-          isSubmitting
-            ? 'opacity-50 cursor-not-allowed'
-            : 'hover:bg-primary-700'
+        className={`w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 px-6 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-200 ${
+          isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
         }`}
       >
         {isSubmitting ? (

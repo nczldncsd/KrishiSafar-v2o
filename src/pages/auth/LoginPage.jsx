@@ -147,10 +147,8 @@ const LoginPage = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`w-full btn-primary py-3 px-4 text-sm font-medium ${
-                    isSubmitting
-                      ? 'opacity-50 cursor-not-allowed'
-                      : 'hover:bg-primary-700'
+                  className={`w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 px-4 text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-200 ${
+                    isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
                 >
                   {isSubmitting ? (
@@ -189,7 +187,7 @@ const LoginPage = () => {
               <div className="mt-6">
                 <Link
                   to={PUBLIC_ROUTES.SIGNUP}
-                  className="w-full btn-outline py-3 px-4 text-sm font-medium hover:bg-primary-50 transition-colors"
+                  className="w-full border-2 border-blue-500 text-blue-600 hover:bg-blue-50 py-3 px-4 text-sm font-medium transition-all duration-200 rounded-xl"
                 >
                   Create new account
                 </Link>

@@ -57,7 +57,7 @@ const BookingPage = () => {
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Experience Not Found</h1>
           <p className="text-gray-600 mb-6">{error || 'The experience you are trying to book does not exist.'}</p>
-          <Link to={PUBLIC_ROUTES.EXPERIENCES} className="btn-primary">
+          <Link to={PUBLIC_ROUTES.EXPERIENCES} className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-200">
             Browse All Experiences
           </Link>
         </div>

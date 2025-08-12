@@ -12,7 +12,7 @@ import {
   Eye
 } from 'lucide-react';
 import { PUBLIC_ROUTES } from '../../utils/routes.js';
-import AnimatedButton from '../components/shared/AnimatedButton';
+import AnimatedButton from '../shared/AnimatedButton';
 
 const ExperienceCard = ({ experience, onWishlistToggle, isInWishlist = false }) => {
   const [isHovered, setIsHovered] = useState(false);

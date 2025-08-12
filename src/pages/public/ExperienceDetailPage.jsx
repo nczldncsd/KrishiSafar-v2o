@@ -49,24 +49,30 @@ const ExperienceDetailPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-slate-600 font-medium">Loading experience...</p>
+        </div>
       </div>
     );
   }
 
   if (error || !experience) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-xl">
+          <div className="w-24 h-24 bg-gradient-to-br from-red-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg className="w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Experience Not Found</h1>
-          <p className="text-gray-600 mb-6">{error || 'The experience you are looking for does not exist.'}</p>
-          <Link to={PUBLIC_ROUTES.EXPERIENCES} className="btn-primary">
+          <h1 className="text-2xl font-bold text-slate-800 mb-4">Experience Not Found</h1>
+          <p className="text-slate-600 mb-6">{error || 'The experience you are looking for does not exist.'}</p>
+          <Link 
+            to={PUBLIC_ROUTES.EXPERIENCES} 
+            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:from-blue-600 hover:to-purple-700"
+          >
             Browse All Experiences
           </Link>
         </div>
@@ -75,32 +81,32 @@ const ExperienceDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="flex mb-8" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-3">
             <li className="inline-flex items-center">
-              <Link to={PUBLIC_ROUTES.HOME} className="text-gray-700 hover:text-primary-600">
+              <Link to={PUBLIC_ROUTES.HOME} className="text-slate-700 hover:text-blue-600 transition-colors duration-200">
                 Home
               </Link>
             </li>
             <li>
               <div className="flex items-center">
-                <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                 </svg>
-                <Link to={PUBLIC_ROUTES.EXPERIENCES} className="text-gray-700 hover:text-primary-600 ml-1">
+                <Link to={PUBLIC_ROUTES.EXPERIENCES} className="text-slate-700 hover:text-blue-600 ml-1 transition-colors duration-200">
                   Experiences
                 </Link>
               </div>
             </li>
             <li aria-current="page">
               <div className="flex items-center">
-                <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                 </svg>
-                <span className="text-gray-500 ml-1">{experience.title}</span>
+                <span className="text-slate-500 ml-1">{experience.title}</span>
               </div>
             </li>
           </ol>
