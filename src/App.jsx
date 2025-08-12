@@ -15,6 +15,10 @@ import LoginPage from './pages/auth/LoginPage.jsx';
 import SignupPage from './pages/auth/SignupPage.jsx';
 import AboutPage from './pages/public/AboutPage.jsx';
 import ContactPage from './pages/public/ContactPage.jsx';
+import FAQPage from './pages/public/FAQPage.jsx';
+import TermsPage from './pages/public/TermsPage.jsx';
+import PrivacyPage from './pages/public/PrivacyPage.jsx';
+import BecomeHostPage from './pages/public/BecomeHostPage.jsx';
 
 // Protected Pages
 import BookingPage from './pages/user/BookingPage.jsx';
@@ -79,6 +83,30 @@ const App = () => {
       <Route path={PUBLIC_ROUTES.CONTACT} element={
         <PublicLayout>
           <ContactPage />
+        </PublicLayout>
+      } />
+
+      <Route path={PUBLIC_ROUTES.FAQ} element={
+        <PublicLayout>
+          <FAQPage />
+        </PublicLayout>
+      } />
+
+      <Route path={PUBLIC_ROUTES.TERMS} element={
+        <PublicLayout>
+          <TermsPage />
+        </PublicLayout>
+      } />
+
+      <Route path={PUBLIC_ROUTES.PRIVACY} element={
+        <PublicLayout>
+          <PrivacyPage />
+        </PublicLayout>
+      } />
+
+      <Route path={PUBLIC_ROUTES.BECOME_HOST} element={
+        <PublicLayout>
+          <BecomeHostPage />
         </PublicLayout>
       } />
 
