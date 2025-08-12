@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth.js';
-import { PUBLIC_ROUTES, PROTECTED_ROUTES, SYSTEM_ROUTES } from './utils/routes.js';
+import { PUBLIC_ROUTES, PROTECTED_ROUTES, HOST_ROUTES, ADMIN_ROUTES, SYSTEM_ROUTES } from './utils/routes.js';
 
 // Layouts
 import PublicLayout from './layouts/PublicLayout.jsx';
@@ -13,15 +13,20 @@ import ExperienceListingPage from './pages/public/ExperienceListingPage.jsx';
 import ExperienceDetailPage from './pages/public/ExperienceDetailPage.jsx';
 import LoginPage from './pages/auth/LoginPage.jsx';
 import SignupPage from './pages/auth/SignupPage.jsx';
+import AboutPage from './pages/public/AboutPage.jsx';
+import ContactPage from './pages/public/ContactPage.jsx';
 
 // Protected Pages
 import BookingPage from './pages/user/BookingPage.jsx';
+
+// Host Pages
+import HostDashboardPage from './pages/host/HostDashboardPage.jsx';
 
 // System Pages
 import NotFoundPage from './pages/system/NotFoundPage.jsx';
 
 const App = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
 
   // Show loading while checking authentication
   if (isLoading) {
@@ -65,6 +70,18 @@ const App = () => {
         </PublicLayout>
       } />
 
+      <Route path={PUBLIC_ROUTES.ABOUT} element={
+        <PublicLayout>
+          <AboutPage />
+        </PublicLayout>
+      } />
+
+      <Route path={PUBLIC_ROUTES.CONTACT} element={
+        <PublicLayout>
+          <ContactPage />
+        </PublicLayout>
+      } />
+
       {/* Protected Routes with AppLayout */}
       {isAuthenticated && (
         <>
@@ -84,6 +101,42 @@ const App = () => {
           {/* <Route path={PROTECTED_ROUTES.MY_BOOKINGS} element={
             <AppLayout>
               <MyBookingsPage />
+            </AppLayout>
+          } /> */}
+        </>
+      )}
+
+      {/* Host Routes with AppLayout */}
+      {isAuthenticated && user?.role === 'host' && (
+        <>
+          <Route path={HOST_ROUTES.DASHBOARD} element={
+            <AppLayout>
+              <HostDashboardPage />
+            </AppLayout>
+          } />
+          
+          {/* Add more host routes here as needed */}
+          {/* <Route path={HOST_ROUTES.EXPERIENCES} element={
+            <AppLayout>
+              <HostExperiencesPage />
+            </AppLayout>
+          } /> */}
+          
+          {/* <Route path={HOST_ROUTES.CREATE_EXPERIENCE} element={
+            <AppLayout>
+              <CreateExperiencePage />
+            </AppLayout>
+          } /> */}
+        </>
+      )}
+
+      {/* Admin Routes with AppLayout */}
+      {isAuthenticated && user?.role === 'admin' && (
+        <>
+          {/* Add admin routes here as needed */}
+          {/* <Route path={ADMIN_ROUTES.DASHBOARD} element={
+            <AppLayout>
+              <AdminDashboardPage />
             </AppLayout>
           } /> */}
         </>

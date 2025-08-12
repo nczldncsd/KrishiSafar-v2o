@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
-import { PUBLIC_ROUTES } from '../utils/routes.js';
+import { PUBLIC_ROUTES, NAVIGATION_STRUCTURE } from '../utils/routes.js';
 
 const PublicLayout = ({ children }) => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -18,42 +18,53 @@ const PublicLayout = ({ children }) => {
     logout();
   };
 
+  // Get navigation items based on user role
+  const getNavigationItems = () => {
+    if (isAuthenticated) {
+      if (user?.role === 'host') {
+        return NAVIGATION_STRUCTURE.host;
+      } else if (user?.role === 'admin') {
+        return NAVIGATION_STRUCTURE.admin;
+      } else {
+        return NAVIGATION_STRUCTURE.user;
+      }
+    }
+    return NAVIGATION_STRUCTURE.public;
+  };
+
+  const navigationItems = getNavigationItems();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <Link to={PUBLIC_ROUTES.HOME} className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+            <Link to={PUBLIC_ROUTES.HOME} className="flex items-center space-x-2 group">
+              <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center group-hover:bg-primary-700 transition-colors duration-200">
                 <span className="text-white font-bold text-lg">K</span>
               </div>
-              <span className="text-xl font-bold text-gray-900">KrishiSafar</span>
+              <span className="text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors duration-200">
+                KrishiSafar
+              </span>
             </Link>
 
             {/* Navigation */}
-            <nav className="hidden md:flex space-x-8">
-              <Link
-                to={PUBLIC_ROUTES.HOME}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActiveRoute(PUBLIC_ROUTES.HOME)
-                    ? 'text-primary-600 bg-primary-50'
-                    : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
-                }`}
-              >
-                Home
-              </Link>
-              <Link
-                to={PUBLIC_ROUTES.EXPERIENCES}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActiveRoute(PUBLIC_ROUTES.EXPERIENCES)
-                    ? 'text-primary-600 bg-primary-50'
-                    : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
-                }`}
-              >
-                Experiences
-              </Link>
+            <nav className="hidden md:flex space-x-1">
+              {navigationItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                    isActiveRoute(item.path)
+                      ? 'text-primary-600 bg-primary-50 border border-primary-200'
+                      : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50 border border-transparent'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
             </nav>
 
             {/* Auth Actions */}
@@ -63,6 +74,17 @@ const PublicLayout = ({ children }) => {
                   <span className="text-sm text-gray-700">
                     Welcome, {user?.name}
                   </span>
+                  
+                  {/* Host Dashboard Link */}
+                  {user?.role === 'host' && (
+                    <Link
+                      to="/host/dashboard"
+                      className="text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors"
+                    >
+                      Host Dashboard
+                    </Link>
+                  )}
+                  
                   <button
                     onClick={handleLogout}
                     className="text-sm text-gray-700 hover:text-primary-600 transition-colors"
@@ -126,12 +148,17 @@ const PublicLayout = ({ children }) => {
                 </li>
                 <li>
                   <Link to={PUBLIC_ROUTES.EXPERIENCES} className="text-gray-300 hover:text-white text-sm transition-colors">
-                    Experiences
+                    Explore Farms
                   </Link>
                 </li>
                 <li>
-                  <Link to={PUBLIC_ROUTES.LOGIN} className="text-gray-300 hover:text-white text-sm transition-colors">
-                    Login
+                  <Link to={PUBLIC_ROUTES.ABOUT} className="text-gray-300 hover:text-white text-sm transition-colors">
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link to={PUBLIC_ROUTES.CONTACT} className="text-gray-300 hover:text-white text-sm transition-colors">
+                    Contact
                   </Link>
                 </li>
               </ul>
