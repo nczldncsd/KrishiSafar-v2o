@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, MapPin, Clock, DollarSign, Users, Star } from 'lucide-react';
+import { Search, Filter, MapPin, Clock, DollarSign, Users, Star, Heart, X } from 'lucide-react';
 import { getExperiences, searchExperiences } from '../../services/api.js';
 import ExperienceCard from '../../components/experience/ExperienceCard.jsx';
 import AdvancedFilters from '../../components/experience/AdvancedFilters.jsx';
 import AnimatedButton from '../../components/shared/AnimatedButton';
+import { useAuth } from '../../hooks/useAuth.js';
 
 const ExperienceListingPage = () => {
+  const { user } = useAuth();
   const [experiences, setExperiences] = useState([]);
   const [filteredExperiences, setFilteredExperiences] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({});
   const [showFilters, setShowFilters] = useState(false);
+  const [wishlist, setWishlist] = useState(new Set());
 
   useEffect(() => {
     const loadExperiences = async () => {
@@ -117,6 +120,23 @@ const ExperienceListingPage = () => {
     setSearchQuery('');
   };
 
+  const handleWishlistToggle = (experienceId) => {
+    if (!user) {
+      // TODO: Show login prompt
+      return;
+    }
+    
+    setWishlist(prev => {
+      const newWishlist = new Set(prev);
+      if (newWishlist.has(experienceId)) {
+        newWishlist.delete(experienceId);
+      } else {
+        newWishlist.add(experienceId);
+      }
+      return newWishlist;
+    });
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -141,14 +161,17 @@ const ExperienceListingPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600 font-medium">Loading amazing experiences...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
         <motion.div
@@ -157,12 +180,22 @@ const ExperienceListingPage = () => {
           variants={containerVariants}
           className="text-center mb-12"
         >
-          <motion.h1 variants={itemVariants} className="text-4xl font-bold text-gray-900 mb-4">
-            Explore Agri-Tourism Experiences
+          <motion.h1 
+            variants={itemVariants} 
+            className="text-5xl md:text-6xl font-bold text-slate-800 mb-6"
+          >
+            Explore
+            <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Agri-Tourism
+            </span>
+            Experiences
           </motion.h1>
-          <motion.p variants={itemVariants} className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <motion.p 
+            variants={itemVariants} 
+            className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed"
+          >
             Discover authentic rural experiences across India. From organic farming to dairy adventures, 
-            find the perfect agricultural experience for your next trip.
+            find the perfect agricultural experience for your next unforgettable journey.
           </motion.p>
         </motion.div>
 
@@ -171,12 +204,12 @@ const ExperienceListingPage = () => {
           initial="hidden"
           animate="visible"
           variants={itemVariants}
-          className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8"
+          className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-6 mb-8"
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Search */}
             <div className="md:col-span-2">
-              <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="search" className="block text-sm font-semibold text-slate-700 mb-2">
                 Search Experiences
               </label>
               <div className="relative">
@@ -186,9 +219,17 @@ const ExperienceListingPage = () => {
                   value={searchQuery}
                   onChange={handleSearch}
                   placeholder="Search by title, location, or category..."
-                  className="w-full px-3 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-3 pl-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm"
                 />
-                <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 transform -translate-y-1/2" />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-slate-100 transition-colors"
+                  >
+                    <X className="w-4 h-4 text-slate-400" />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -200,6 +241,7 @@ const ExperienceListingPage = () => {
                 fullWidth
                 icon={<Filter className="w-4 h-4" />}
                 onClick={() => setShowFilters(!showFilters)}
+                className="border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 shadow-sm hover:shadow-md"
               >
                 {showFilters ? 'Hide' : 'Show'} Filters
               </AnimatedButton>
@@ -231,18 +273,31 @@ const ExperienceListingPage = () => {
           initial="hidden"
           animate="visible"
           variants={itemVariants}
-          className="flex items-center justify-between mb-6"
+          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8"
         >
-          <p className="text-gray-600">
-            Showing {filteredExperiences.length} of {experiences.length} experiences
-          </p>
+          <div className="flex items-center space-x-4">
+            <div className="bg-white/80 backdrop-blur-md rounded-xl px-4 py-2 shadow-lg">
+              <p className="text-slate-700 font-semibold">
+                <span className="text-blue-600">{filteredExperiences.length}</span> of {experiences.length} experiences
+              </p>
+            </div>
+            
+            {wishlist.size > 0 && (
+              <div className="bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl px-4 py-2 text-white shadow-lg">
+                <div className="flex items-center space-x-2">
+                  <Heart className="w-4 h-4 fill-current" />
+                  <span className="font-semibold">{wishlist.size} in wishlist</span>
+                </div>
+              </div>
+            )}
+          </div>
           
           {(searchQuery || Object.keys(filters).length > 0) && (
             <AnimatedButton
               variant="ghost"
               size="sm"
               onClick={clearAllFilters}
-              className="text-red-600 hover:text-red-700"
+              className="text-red-600 hover:text-red-700 hover:bg-red-50"
             >
               Clear All Filters
             </AnimatedButton>
@@ -257,18 +312,19 @@ const ExperienceListingPage = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="text-center py-16"
+              className="text-center py-20 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl"
             >
-              <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Search className="w-12 h-12 text-gray-400" />
+              <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Search className="w-12 h-12 text-slate-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No experiences found</h3>
-              <p className="text-gray-600 mb-6">
-                Try adjusting your search criteria or filters to find more experiences.
+              <h3 className="text-2xl font-bold text-slate-800 mb-3">No experiences found</h3>
+              <p className="text-slate-600 mb-8 max-w-md mx-auto">
+                Try adjusting your search criteria or filters to discover amazing agri-tourism experiences.
               </p>
               <AnimatedButton
                 variant="outline"
                 onClick={clearAllFilters}
+                className="border-blue-200 text-blue-700 hover:bg-blue-50"
               >
                 Clear Filters
               </AnimatedButton>
@@ -289,12 +345,43 @@ const ExperienceListingPage = () => {
                   animate="visible"
                   transition={{ delay: index * 0.1 }}
                 >
-                  <ExperienceCard experience={experience} />
+                  <ExperienceCard 
+                    experience={experience}
+                    onWishlistToggle={handleWishlistToggle}
+                    isInWishlist={wishlist.has(experience.id)}
+                  />
                 </motion.div>
               ))}
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Bottom CTA */}
+        {filteredExperiences.length > 0 && (
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={itemVariants}
+            className="text-center mt-16"
+          >
+            <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-2xl p-8 text-white shadow-2xl">
+              <h3 className="text-2xl font-bold mb-4">
+                Can't find what you're looking for?
+              </h3>
+              <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+                Let us know your preferences and we'll help you discover the perfect agri-tourism experience.
+              </p>
+              <AnimatedButton
+                variant="outline"
+                size="lg"
+                className="border-white text-white hover:bg-white hover:text-blue-600 shadow-lg"
+              >
+                Contact Us
+              </AnimatedButton>
+            </div>
+          </motion.div>
+        )}
       </div>
     </div>
   );

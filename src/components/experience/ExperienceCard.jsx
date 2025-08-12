@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { 
+  MapPin, 
+  Clock, 
+  Users, 
+  Star, 
+  Heart, 
+  Calendar,
+  ArrowRight,
+  Eye
+} from 'lucide-react';
 import { PUBLIC_ROUTES } from '../../utils/routes.js';
+import AnimatedButton from '../shared/AnimatedButton';
 
-const ExperienceCard = ({ experience }) => {
+const ExperienceCard = ({ experience, onWishlistToggle, isInWishlist = false }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
   const {
     id,
     title,
@@ -32,29 +46,68 @@ const ExperienceCard = ({ experience }) => {
     return text.substring(0, maxLength) + '...';
   };
 
+  const handleWishlistToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onWishlistToggle) {
+      onWishlistToggle(experience.id);
+    }
+  };
+
+  const getCategoryColor = (category) => {
+    const colors = {
+      'Farming': 'from-green-500 to-emerald-500',
+      'Dairy': 'from-blue-500 to-cyan-500',
+      'Vineyard': 'from-purple-500 to-pink-500',
+      'Spices': 'from-red-500 to-rose-500',
+      'Beekeeping': 'from-yellow-500 to-orange-500',
+      'Aquaculture': 'from-teal-500 to-cyan-500'
+    };
+    return colors[category] || 'from-slate-500 to-gray-500';
+  };
+
   return (
-    <Link 
-      to={`${PUBLIC_ROUTES.EXPERIENCES}/${id}`}
-      className="card hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group"
+    <motion.div
+      className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-slate-100"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      whileHover={{ scale: 1.02, y: -5 }}
     >
-      {/* Image */}
-      <div className="relative h-48 overflow-hidden">
+      {/* Image Container */}
+      <div className="relative h-56 overflow-hidden">
         <img
           src={images[0]}
           alt={title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
-        <div className="absolute top-3 left-3">
-          <span className="inline-block bg-primary-600 text-white text-xs font-medium px-2 py-1 rounded-full">
+        
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+        
+        {/* Category Badge */}
+        <div className="absolute top-4 left-4">
+          <span className={`inline-block px-3 py-1 bg-gradient-to-r ${getCategoryColor(category)} text-white text-xs font-medium rounded-full shadow-lg`}>
             {category}
           </span>
         </div>
-        <div className="absolute top-3 right-3">
-          <div className="bg-white bg-opacity-90 backdrop-blur-sm rounded-lg px-2 py-1 flex items-center space-x-1">
-            <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-            <span className="text-sm font-medium text-gray-900">{rating}</span>
+        
+        {/* Wishlist Button */}
+        <button
+          onClick={handleWishlistToggle}
+          className={`absolute top-4 right-4 p-2 rounded-full shadow-lg transition-all duration-300 ${
+            isInWishlist 
+              ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white' 
+              : 'bg-white/90 backdrop-blur-sm text-slate-600 hover:text-pink-500'
+          }`}
+        >
+          <Heart className={`w-4 h-4 ${isInWishlist ? 'fill-current' : ''}`} />
+        </button>
+        
+        {/* Rating Badge */}
+        <div className="absolute bottom-4 right-4">
+          <div className="bg-white/95 backdrop-blur-sm rounded-xl px-3 py-2 flex items-center space-x-1 shadow-lg">
+            <Star className="w-4 h-4 text-yellow-500 fill-current" />
+            <span className="text-sm font-semibold text-slate-800">{rating}</span>
           </div>
         </div>
       </div>
@@ -62,21 +115,18 @@ const ExperienceCard = ({ experience }) => {
       {/* Content */}
       <div className="p-6">
         {/* Title and Location */}
-        <div className="mb-3">
-          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-primary-600 transition-colors mb-1">
+        <div className="mb-4">
+          <h3 className="text-xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors duration-200 mb-2 line-clamp-2">
             {title}
           </h3>
-          <div className="flex items-center text-sm text-gray-600">
-            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            {location}
+          <div className="flex items-center text-slate-600">
+            <MapPin className="w-4 h-4 mr-2 text-blue-500" />
+            <span className="text-sm font-medium">{location}</span>
           </div>
         </div>
 
         {/* Description */}
-        <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+        <p className="text-slate-600 text-sm mb-4 leading-relaxed line-clamp-2">
           {truncateDescription(description)}
         </p>
 
@@ -86,13 +136,13 @@ const ExperienceCard = ({ experience }) => {
             {activities.slice(0, 3).map((activity, index) => (
               <span
                 key={index}
-                className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-md"
+                className="inline-block bg-gradient-to-r from-slate-100 to-slate-200 text-slate-700 text-xs px-3 py-1 rounded-full font-medium"
               >
                 {activity}
               </span>
             ))}
             {activities.length > 3 && (
-              <span className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-md">
+              <span className="inline-block bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 text-xs px-3 py-1 rounded-full font-medium">
                 +{activities.length - 3} more
               </span>
             )}
@@ -100,54 +150,81 @@ const ExperienceCard = ({ experience }) => {
         </div>
 
         {/* Host Info */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-              <span className="text-primary-600 text-sm font-medium">
+        <div className="flex items-center justify-between mb-4 p-3 bg-gradient-to-r from-slate-50 to-blue-50 rounded-xl">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+              <span className="text-white text-sm font-bold">
                 {host.name.charAt(0)}
               </span>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-900">{host.name}</p>
-              <p className="text-xs text-gray-500">{host.experience} experience</p>
+              <p className="text-sm font-semibold text-slate-800">Hosted by {host.name}</p>
+              <p className="text-xs text-slate-600">{host.experience} experience</p>
             </div>
           </div>
         </div>
 
-        {/* Price and Details */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <div className="flex items-center space-x-4 text-sm text-gray-600">
-            <span className="flex items-center">
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              {duration}
+        {/* Details and Price */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-4 text-sm text-slate-600">
+            <span className="flex items-center space-x-1">
+              <Clock className="w-4 h-4 text-blue-500" />
+              <span className="font-medium">{duration}</span>
             </span>
-            <span className="flex items-center">
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-              Max {maxGuests}
+            <span className="flex items-center space-x-1">
+              <Users className="w-4 h-4 text-purple-500" />
+              <span className="font-medium">Max {maxGuests}</span>
             </span>
           </div>
           <div className="text-right">
-            <p className="text-lg font-bold text-primary-600">{formatPrice(price)}</p>
-            <p className="text-xs text-gray-500">per person</p>
+            <p className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              {formatPrice(price)}
+            </p>
+            <p className="text-xs text-slate-500">per person</p>
           </div>
         </div>
 
         {/* Reviews */}
-        <div className="mt-3 flex items-center justify-between text-sm">
+        <div className="flex items-center justify-between mb-4 text-sm">
           <div className="flex items-center space-x-1">
-            <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-            <span className="font-medium text-gray-900">{rating}</span>
-            <span className="text-gray-500">({reviews} reviews)</span>
+            <Star className="w-4 h-4 text-yellow-500 fill-current" />
+            <span className="font-semibold text-slate-800">{rating}</span>
+            <span className="text-slate-500">({reviews} reviews)</span>
           </div>
         </div>
+
+        {/* Action Buttons */}
+        <div className="flex space-x-3">
+          <Link to={`${PUBLIC_ROUTES.EXPERIENCES}/${id}`} className="flex-1">
+            <AnimatedButton
+              variant="outline"
+              fullWidth
+              icon={<Eye className="w-4 h-4" />}
+              className="border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 shadow-sm hover:shadow-md"
+            >
+              View Details
+            </AnimatedButton>
+          </Link>
+          
+          <AnimatedButton
+            variant="primary"
+            icon={<Calendar className="w-4 h-4" />}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105"
+          >
+            Book Now
+          </AnimatedButton>
+        </div>
       </div>
-    </Link>
+
+      {/* Hover Effect Border */}
+      <motion.div
+        className="absolute inset-0 rounded-2xl border-2 border-transparent"
+        animate={{
+          borderColor: isHovered ? ['#3b82f6', '#8b5cf6', '#3b82f6'] : 'transparent'
+        }}
+        transition={{ duration: 2, repeat: isHovered ? Infinity : 0 }}
+      />
+    </motion.div>
   );
 };
 

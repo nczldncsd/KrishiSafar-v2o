@@ -30,7 +30,9 @@ import NotificationsPage from './pages/user/NotificationsPage.jsx';
 
 // Host Pages
 import HostDashboardPage from './pages/host/HostDashboardPage.jsx';
+import HostExperiencesPage from './pages/host/HostExperiencesPage.jsx';
 import CreateExperiencePage from './pages/host/CreateExperiencePage.jsx';
+import HostBookingsPage from './pages/host/HostBookingsPage.jsx';
 
 // System Pages
 import NotFoundPage from './pages/system/NotFoundPage.jsx';
@@ -41,8 +43,11 @@ const App = () => {
   // Show loading while checking authentication
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600 font-medium">Loading KrishiSafar...</p>
+        </div>
       </div>
     );
   }
@@ -166,28 +171,28 @@ const App = () => {
             </AppLayout>
           } />
           
+          <Route path={HOST_ROUTES.EXPERIENCES} element={
+            <AppLayout>
+              <HostExperiencesPage />
+            </AppLayout>
+          } />
+          
           <Route path={HOST_ROUTES.CREATE_EXPERIENCE} element={
             <AppLayout>
               <CreateExperiencePage />
             </AppLayout>
           } />
           
-          {/* Add more host routes here as needed */}
-          {/* <Route path={HOST_ROUTES.EXPERIENCES} element={
+          <Route path={HOST_ROUTES.BOOKINGS} element={
             <AppLayout>
-              <HostExperiencesPage />
+              <HostBookingsPage />
             </AppLayout>
-          } /> */}
+          } />
           
+          {/* Add more host routes here as needed */}
           {/* <Route path={HOST_ROUTES.EDIT_EXPERIENCE} element={
             <AppLayout>
               <EditExperiencePage />
-            </AppLayout>
-          } /> */}
-          
-          {/* <Route path={HOST_ROUTES.BOOKINGS} element={
-            <AppLayout>
-              <HostBookingsPage />
             </AppLayout>
           } /> */}
           
